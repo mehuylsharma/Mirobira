@@ -53,6 +53,72 @@ router.post('/', async (req, res) => {
     }
 })
 
+//Open the book page
+router.get('/:id', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id);
+        res.render('books/show', {
+            book: book,
+            author: await Author.findById(book.author)
+        })
+    } catch {
+        res.redirect('/');
+    }
+})
+
+//Show the edit page
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id);
+        const author = await Author.findById(book.author);
+        res.render('books/edit', {
+            book: book,
+            author: author,
+            authors: await Author.find({})
+        })
+    } catch {
+        res.redirect(`/books/${req.params.id}`)
+    }
+})
+
+//Update the book
+router.put('/:id', async (req, res) => {
+    let book;
+    try {
+        book = await Book.findById(req.params.id);
+        book.title = req.body.title;
+        book.pageCount = req.body.pageCount;
+        book.publishDate = req.body.publishDate;
+        book.author = req.body.author;
+        book.description = req.body.description;
+        if (req.body.cover != null && req.body.cover != ''){
+            saveCover(book, req.body.cover);
+        }
+        await book.save();
+        res.redirect(`/books/${book.id}`);
+    } catch {
+        if (book == null){
+            res.redirect('/books');
+        } 
+        renderNewPage(res, book, true);
+    }
+})
+
+//Delete book router
+router.delete('/:id', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id);
+        await book.remove();
+        res.redirect('/books')
+    } catch {
+        if (book = null){
+            res.redirect('/books')
+        } else {
+            res.redirect(`/books/${req.params.id}`)
+        }
+    }
+})
+
 async function renderNewPage(res, book, hasError = false){
     try{
         const authors = await Author.find({});

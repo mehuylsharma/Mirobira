@@ -1,0 +1,21 @@
+<h2><%= book.title %></h2>
+<div>
+    <img height="150" width="100" src="<%= book.coverImagePath %>">
+</div>
+<ul>
+    <li>Author: <%= author.name %></li>
+    <li>Publish Date : <%= book.publishDate.toString().replace(/(\d+:)([^]*)(\))/, '') %></li>
+    <li>Page Count : <%= book.pageCount %></li>
+    <li>Description : <%= book.description %></li>
+</ul>
+<div>
+    <form method="GET" action="/books/<%= book.id %>/edit">
+        <button type="submit">Edit</button>
+    </form>
+    <%- include('../partials/deleteForm', {url: `/books/${book.id}`}) %>
+</div>
+<div>
+    <form method="GET" action="/authors/<%= author.id %>">
+        <button type="submit">Open Author Page</button>
+    </form>
+</div>

@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+//Show the author page
 router.get('/:id', async (req, res) => {
     try {
         const author = await Author.findById(req.params.id);
@@ -52,6 +53,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+//Render the Edit page
 router.get('/:id/edit', async (req, res) => {
     try {
         const author = await Author.findById(req.params.id);
@@ -61,6 +63,7 @@ router.get('/:id/edit', async (req, res) => {
     }
 })
 
+//Edit the author
 router.put('/:id', async (req, res) => {
     let author;
 
@@ -81,7 +84,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-
+//Delete the author
 router.delete('/:id', async (req, res) => {
     let author;
 
